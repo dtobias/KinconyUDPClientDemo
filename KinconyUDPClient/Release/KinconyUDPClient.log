@@ -1,0 +1,8 @@
+﻿  KinconyRelay.cpp
+  KinconyUDPClient.cpp
+  WinsockComm.cpp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 15 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  KinconyUDPClient.vcxproj -> C:\Users\dtobias\Desktop\Kincony Relay  Test Client\Release\KinconyUDPClient.exe

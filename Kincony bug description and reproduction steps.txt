@@ -1,0 +1,69 @@
+From broken:
+	- ensure vircom is killed
+	- power off relay controller
+	- start vircom, wait for its window to open
+	- power up the relay controller
+	- click "Device" button on vircom
+	- double click on the device that appears
+	- load defaults
+	- check that working mode = tcp server
+	- change ip address to be the same as used in relay.exe
+	- click Modify Setting
+	- power down relay box wait 10 sec and power back up
+	- run relay.exe
+		click connect (relay tick boxes should all un-grey)
+		run Scan
+			You must see the controller respond to RELAY-SCAN_DEVICE-NOW
+			with RELAY-SCAN_DEVICE-CHANNEL_32,OK and RELAY-TEST-NOW response must be
+			HOST-TEST-START.  If this does not happen, try re-doing this procedure 			
+			from scratch, it usually takes no more than twice to begin working again...
+		test relays by ticking and unticking the boxes and see the LEDs go on and hearing the relays actuate.
+	- kill relay.exe
+	- in vircom, 
+		open the device management box for the relay controller 
+		change work mode to UDP, click Modify Setting.
+	- Run KinconyUDPClient.exe, it will exercise the relays.
+	----------  At this point I have proven there is nothing wrong with my UDP client.  
+	----------- I can set, read back relay state, read back port state with no problem.	
+	- Stop KinconyUDPClient.exe by holding the shift key for up to 30 seconds (until the relay cycle completes).
+
+	- Now completely kill vircom *without* removing power from the Kincony relay controller:
+		kill the device management box (click x in upper right hand corner)
+		kill vircom main window (click x in upper right hand corner)
+		kill vircom in system tray (right click on icon and select exit)
+
+	- Run KinconyUDPClient.exe again
+	----------  At this point I have proven that as long as we don't touch the power on the relay controller 
+	----------- my Kincony Client will run without vircom present. (sanity check)
+
+	- Run and kill my Kincony UDP client as many times as you like.  Use the shift to kill it or just click the x in the upper right corner.
+	- My code always starts and runs.  So it's unlikely that the problem which will be demonstrated shortly is related to timing, etc. in my code.
+
+	--------------------------------------- Here's where the problem is always seen ---------------------------------------------
+	- now pull the power on the relay box and leave it out for 15 seconds
+	- if my relay client was running when you pulled the power, kill it by clicking in the upper right hand corner, normal windows method of closing a window.
+	- plug the power back in to the controller box.  
+
+	- The expectation is that simply powering down will *not* be a problem and that the box will again work like before once it is powered up, remembering all operations settings.
+		- But it does not work like this as we shall see...
+
+	- Start my program.  It will either hang at the first command or it will exit on its own because the return string from the start up commands is incorrect.
+
+
+
+	--------------------------------------- Conclusion ---------------------------------------------
+	- You saw my program running under various circumstances.  
+		- Start and stoped it several times with no errors.  
+		- Started it with and without vircom running (not even in the tray) with no errors
+	- Either there is something wrong with my code that is needed in order to get the relay controller started after a power up OR there is a bug in the FW code.
+		- You can see by inspecting my program (which is so simple it will take you less than 10 minutes to do) that I already do the stated init
+			RELAY-SCAN_DEVICE-NOW
+			RELAY-TEST-NOW
+			if something else is needed, please telll me.
+
+		- IF this is a problem in the FW, where some setting does not survive a power cycle please fix it and let me install new FW.  I will test it for you.
+		  	- Once this box is configured one time using vircom, I need to be able to power this box on and off as many time as I like WITHOUT vircom 
+			  present without causing this kind of issue.  
+
+
+To recover the controller box to functional condition, go back to the top of this file and do all the steps starting at "from broken".
